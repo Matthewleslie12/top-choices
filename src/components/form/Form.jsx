@@ -101,7 +101,6 @@ const Form = () => {
         </label>
         <ReactStars
           count={5}
-          // onChange={(e) => handleInputChange("rating", e.target.value)}
           onChange={ratingChanged}
           size={24}
           activeColor="#ffd700"
