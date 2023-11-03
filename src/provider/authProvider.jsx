@@ -12,7 +12,7 @@ const AuthProvider = ({children}) => {
 
   const setToken = (newToken) => {
     setToken_(newToken);
-  }; // updates the auth token, updates token state using setToken and stores it in localStorage using setItem
+  };
 
   const setUserId = (newUserId) => {
     setUserId_(newUserId);
@@ -27,9 +27,7 @@ const AuthProvider = ({children}) => {
       delete axios.defaults.headers.common["Authorization"];
       localStorage.removeItem("token");
     }
-  }, [token]); // runs when token is updated
-  // if token is null or undefined it will remove the auth heading from axios and localStorage
-
+  }, [token]);
   const contextValue = useMemo(
     () => ({
       token,

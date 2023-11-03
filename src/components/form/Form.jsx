@@ -9,6 +9,7 @@ const initialFormData = {
   link: "",
   notes: "",
   imagePath: "",
+  cuisine: "",
 };
 
 const Form = () => {
@@ -31,7 +32,6 @@ const Form = () => {
   };
 
   const ratingChanged = (newRating) => {
-    console.log(newRating);
     setFormData((prevData) => ({
       ...prevData,
       rating: newRating,
@@ -77,76 +77,104 @@ const Form = () => {
   };
 
   return (
-    <form
-      className="flex flex-col mx-4 pt-8 "
-      onSubmit={submitHandler}
-      encType="multipart/form-data"
-    >
-      <div className="mb-6 flex flex-col">
-        <label htmlFor="location" className="px-1">
-          Location
-        </label>
+    <div>
+      <form
+        className="flex flex-col mx-4 pt-4 gap-y-3  overflow-auto"
+        onSubmit={submitHandler}
+        encType="multipart/form-data"
+      >
+        <div className="flex flex-col mx-1">
+          <label htmlFor="location" className="">
+            Location
+          </label>
+          <input
+            placeholder="Enter Location"
+            type="text"
+            id="location"
+            className="border h-9 rounded-md shadow-lg px-2 outline-none focus:outline-dullGreen"
+            onChange={(e) => handleInputChange("location", e.target.value)}
+          />
+        </div>
+        <div className=" flex flex-col mx-1">
+          <label htmlFor="rating" className="">
+            Rating
+          </label>
+          <ReactStars
+            count={5}
+            onChange={ratingChanged}
+            size={40}
+            activeColor="#F5DBC4"
+            color="lightGray"
+            isHalf={true}
+          />
+        </div>
+        <div className=" flex flex-col mx-1">
+          <label htmlFor="link" className="">
+            Link
+          </label>
+          <input
+            placeholder="Enter Link"
+            type="text"
+            id="link"
+            className="border rounded-md h-9 shadow-lg px-2 outline-none focus:outline-dullGreen"
+            onChange={(e) => handleInputChange("link", e.target.value)}
+          />
+        </div>
+        <div className=" flex flex-col mx-1">
+          <label htmlFor="cuisine" className="">
+            Cuisine
+          </label>
+          <input
+            placeholder="What cuisine was it"
+            type="text"
+            id="cuisine"
+            className="border rounded-md h-9 shadow-lg px-2 outline-none focus:outline-dullGreen"
+            onChange={(e) => handleInputChange("cuisine", e.target.value)}
+          />
+        </div>
+        <div className="flex flex-col mx-1">
+          <label htmlFor="notes" className="">
+            Notes
+          </label>
+          <textarea
+            name="notes"
+            id="notes"
+            cols="30"
+            rows="5"
+            className="resize-none border rounded-md shadow-xl px-2 outline-none focus:outline-dullGreen"
+            onChange={(e) => handleInputChange("notes", e.target.value)}
+          ></textarea>
+        </div>
+        <p className="text-red-500 capitalize text-xs font-bold mx-1 underline">
+          {error}
+        </p>
+
         <input
-          placeholder="Enter Location"
-          type="text"
-          id="location"
-          className="border bg-gray-100 rounded-2xl shadow-lg px-2 outline-none focus:outline-dullGreen"
-          onChange={(e) => handleInputChange("location", e.target.value)}
+          type="file"
+          id="imagePath"
+          name="file"
+          onChange={(e) =>
+            handleInputChange(
+              "imagePath",
+              e.target.value,
+              console.log(e.target.value)
+            )
+          }
+          className="hidden"
         />
-      </div>
-
-      <div className="mb-6 flex flex-col">
-        <label htmlFor="rating" className="px-1">
-          Rating
+        {/* //TODO allow users to upload an image, get the url from that and store in sql */}
+        <label
+          htmlFor="imagePath"
+          className="w-fit text-sm py-2 px-4 rounded-md font-semibold bg-peach text-pink-700 hover:bg-darkPeach cursor-pointer mx-1"
+        >
+          Choose an image! (Optional)
         </label>
-        <ReactStars
-          count={5}
-          onChange={ratingChanged}
-          size={24}
-          activeColor="#ffd700"
-          isHalf={true}
-        />
-      </div>
 
-      <div className="mb-6 flex flex-col">
-        <label htmlFor="link" className="px-1">
-          Link
-        </label>
-        <input
-          placeholder="Enter Link"
-          type="text"
-          id="link"
-          className="border bg-gray-100 rounded-2xl shadow-lg px-2 outline-none focus:outline-dullGreen"
-          onChange={(e) => handleInputChange("link", e.target.value)}
-        />
-      </div>
-
-      <div className="mb-6 flex flex-col">
-        <label htmlFor="notes" className="px-1">
-          Notes
-        </label>
-        <textarea
-          name="notes"
-          id="notes"
-          cols="30"
-          rows="5"
-          className="resize-none border bg-gray-100 rounded-2xl shadow-xl px-2 outline-none focus:outline-dullGreen"
-          onChange={(e) => handleInputChange("notes", e.target.value)}
-        ></textarea>
-      </div>
-
-      <input
-        type="file"
-        id="imagePath"
-        name="image"
-        onChange={(e) => handleInputChange("imagePath", e.target.value)}
-      />
-
-      <button className="mx-2 p-4 rounded-xl bg-paleBlue hover:bg-darkBlue text-white font-bold text-lg mb-12">
-        Submit
-      </button>
-      <p>{error}</p>
-    </form>
+        <button className="p-4 rounded-xl bg-paleBlue hover:bg-darkBlue text-white font-bold text-lg mb-32 mx-1">
+          Submit
+        </button>
+      </form>
+    </div>
   );
 };
 export default Form;

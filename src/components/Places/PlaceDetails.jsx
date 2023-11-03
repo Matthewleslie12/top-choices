@@ -46,8 +46,11 @@ const PlaceDetails = () => {
         {placeDetails ? (
           <div>
             <h1>{placeDetails.location}</h1>
+
             <img src={placeDetails.image_path} alt="" />
+
             <p>{placeDetails.rating}</p>
+            <p>{placeDetails.cuisine}</p>
             <Link
               className="underline text-darkGreen"
               to={placeDetails.link}

@@ -16,19 +16,20 @@ const Home = () => {
   console.log("user id: ", userId);
   return (
     <>
-      <div className="h-screen flex flex-col ">
+      <div className="flex flex-col overflow-auto h-screen">
         {loading ? (
           <p>Loading...</p>
         ) : userInfo ? (
-          <div className="flex flex-col pt-4">
-            <h1 className="font-semibold text-lg mx-4">
-              Enter the details of the place you visited!
-            </h1>
-            <Form />
+          <div className="flex flex-col pt-4 bg-dullGreen px-2 h-screen">
+            <div className="bg-white  rounded-t-xl h-full">
+              <h1 className="font-semibold text-lg mx-4 pt-4">
+                Where did you go?
+              </h1>
+              <Form />
+            </div>
           </div>
         ) : null}
       </div>
-
       <Nav />
     </>
   );

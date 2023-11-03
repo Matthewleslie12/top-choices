@@ -15,6 +15,7 @@ export default {
         burgundy: "#74586E",
         paleBlue: "#C4DEF5",
         darkBlue: "#98C6EE",
+        darkPeach: "#EEC098",
       },
     },
   },

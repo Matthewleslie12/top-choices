@@ -16,10 +16,10 @@ const Saved = () => {
         .get(`http://localhost:8081/form?userId=${userId}`)
         .then((res) => {
           if (res.data && res.data.data) {
-            console.log("API Response:", res.data.data); // Log the API response
             const userPosts = res.data.data;
-            console.log("User Posts:", userPosts); // Log the processed data
+
             setSavedData(userPosts);
+            console.log(savedData);
           }
           setLoading(false);
         })
@@ -37,33 +37,38 @@ const Saved = () => {
   };
 
   return (
-    <div>
+    <div className="h-screen">
       {loading ? (
         <p>Loading...</p>
       ) : (
-        <div className="flex flex-col gap-3 px-4 py-8">
-          <h1 className="font-bold  text-xl">Browse your saved places!</h1>
-          <h3>{userId}</h3>
+        <div className="flex flex-col gap-3 px-4 pt-8 mb-32 ">
+          <h1 className="font-bold  text-xl">Saved Places</h1>
+
           {/* //TODO: Add a sort and search functionality to query the db for places maybe handle it on another page and import here to try to keep clean*/}
           {savedData.length > 0 ? (
             savedData.map((item) => (
               <div
                 key={item.id}
-                className="rounded-2xl bg-paleBlue p-4 h-32 cursor-pointer hover:bg-darkBlue"
+                className="rounded-2xl bg-paleBlue p-4 h-32 cursor-pointer hover:bg-darkBlue "
                 onClick={() => handlePlaceClick(item.id)}
               >
                 <div className="grid grid-cols-2 gap-3 ">
-                  <img
-                    src={item.image_path}
-                    alt=""
-                    className="h-24  object-cover rounded-xl"
-                  />
-                  <div className="">
-                    <h1 className="font-semibold capitalize">
+                  {item.image_path ? (
+                    <img
+                      src={item.image_path}
+                      alt=""
+                      className="h-24  object-cover rounded-xl"
+                    />
+                  ) : (
+                    <div className="h-24 rounded-xl bg-rose-400 w-24"></div> // TODO: Add an animation? or add my own food images and have them be math.random to display differnet oens
+                  )}
+
+                  <div className="flex flex-col">
+                    <h1 className="font-semibold capitalize text-lg">
                       {item.location}
                     </h1>
-
-                    {/* //TODO: change this with the cuisine / genre */}
+                    <p className="capitalize text-sm">{item.cuisine}</p>
+                    <p className="mt-auto">{item.rating}/5</p>
                   </div>
                 </div>
               </div>
