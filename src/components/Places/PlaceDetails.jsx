@@ -4,6 +4,8 @@ import {Link, useNavigate, useParams} from "react-router-dom";
 import Nav from "../navbar/Nav";
 import {Icon} from "@iconify/react";
 import {Tooltip} from "react-tooltip";
+import "animate.css";
+
 const PlaceDetails = () => {
   const {id} = useParams();
   const [placeDetails, setPlaceDetails] = useState(null);
@@ -11,10 +13,8 @@ const PlaceDetails = () => {
   useEffect(() => {
     if (id)
       axios.get(`http://localhost:8081/places/${id}`).then((res) => {
-        console.log(id);
         if (res.data && res.data.data) {
           setPlaceDetails(res.data.data);
-          console.log(res.data.data);
         }
       });
   }, [id]);
@@ -32,8 +32,8 @@ const PlaceDetails = () => {
   const navigate = useNavigate();
 
   return (
-    <>
-      <div>
+    <main className="">
+      <div className="p-4 h-screen animate__animated animate__fadeIn bg-mustard">
         <button
           data-tooltip-id="my-tooltip"
           data-tooltip-content="Back to list!"
@@ -44,15 +44,14 @@ const PlaceDetails = () => {
         </button>
         <Tooltip id="my-tooltip" />
         {placeDetails ? (
-          <div>
-            <h1>{placeDetails.location}</h1>
-
+          <div className="p-4">
+            <h1 className="font-bold text-lg">{placeDetails.location}</h1>
             <img src={placeDetails.image_path} alt="" />
+            <p className="">{placeDetails.rating}</p>
 
-            <p>{placeDetails.rating}</p>
             <p>{placeDetails.cuisine}</p>
             <Link
-              className="underline text-darkGreen"
+              className="underline "
               to={placeDetails.link}
               target="_blank"
               rel="noreferrer"
@@ -69,7 +68,7 @@ const PlaceDetails = () => {
         )}
       </div>
       <Nav />
-    </>
+    </main>
   );
 };
 export default PlaceDetails;

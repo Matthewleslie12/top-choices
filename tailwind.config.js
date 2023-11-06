@@ -16,6 +16,8 @@ export default {
         paleBlue: "#C4DEF5",
         darkBlue: "#98C6EE",
         darkPeach: "#EEC098",
+        darkerPeach: "#e7a56c",
+        darkerBlue: "#6caee7",
       },
     },
   },

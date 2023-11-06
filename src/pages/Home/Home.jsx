@@ -13,7 +13,7 @@ const Home = () => {
       setLoading(false);
     }
   }, [userInfo, token]);
-  console.log("user id: ", userId);
+
   return (
     <>
       <div className="flex flex-col overflow-auto h-screen">

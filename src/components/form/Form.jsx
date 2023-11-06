@@ -2,6 +2,7 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 import {useAuth} from "../../provider/authProvider";
 import ReactStars from "react-rating-stars-component";
+import CreatableSelect from "react-select/creatable";
 
 const initialFormData = {
   location: "",
@@ -11,12 +12,24 @@ const initialFormData = {
   imagePath: "",
   cuisine: "",
 };
+const customStyles = {
+  placeholder: (defaultStyles) => {
+    return {
+      ...defaultStyles,
+      color: "#C7C7CD",
+      fontSize: "12px",
+      fontWeight: "bold",
+    };
+  },
+};
 
 const Form = () => {
   const {userId} = useAuth();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState(initialFormData);
   const [error, setError] = useState("");
+  const [selectedCuisine, setSelectedCuisine] = useState(null);
+  const [cuisineType, setCuisineType] = useState();
 
   useEffect(() => {
     if (userId) {
@@ -57,6 +70,7 @@ const Form = () => {
       ...formData,
       userId: userId,
       link: normalizeLink(formData.link),
+      cuisine: selectedCuisine?.value,
     };
 
     axios
@@ -74,6 +88,27 @@ const Form = () => {
         }
         console.error(err);
       });
+  };
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:8081/cuisines")
+      .then((res) => {
+        setCuisineType(res.data);
+      })
+      .catch((err) => {
+        return err;
+      });
+  }, []);
+
+  const handleCuisineChange = (selectedOption) => {
+    setSelectedCuisine(selectedOption);
+    if (selectedOption) {
+      setFormData((prevData) => ({
+        ...prevData,
+        imagePath: selectedOption.image || "",
+      }));
+    }
   };
 
   return (
@@ -103,7 +138,7 @@ const Form = () => {
             count={5}
             onChange={ratingChanged}
             size={40}
-            activeColor="#F5DBC4"
+            activeColor="#FDC858"
             color="lightGray"
             isHalf={true}
           />
@@ -124,14 +159,17 @@ const Form = () => {
           <label htmlFor="cuisine" className="">
             Cuisine
           </label>
-          <input
-            placeholder="What cuisine was it"
-            type="text"
-            id="cuisine"
-            className="border rounded-md h-9 shadow-lg px-2 outline-none focus:outline-dullGreen"
-            onChange={(e) => handleInputChange("cuisine", e.target.value)}
+
+          <CreatableSelect
+            value={selectedCuisine}
+            onChange={handleCuisineChange}
+            options={cuisineType}
+            isSearchable
+            styles={customStyles}
+            placeholder="Select a cuisine or start typing..."
           />
         </div>
+
         <div className="flex flex-col mx-1">
           <label htmlFor="notes" className="">
             Notes
@@ -153,24 +191,18 @@ const Form = () => {
           type="file"
           id="imagePath"
           name="file"
-          onChange={(e) =>
-            handleInputChange(
-              "imagePath",
-              e.target.value,
-              console.log(e.target.value)
-            )
-          }
+          onChange={(e) => handleInputChange("imagePath", e.target.value)}
           className="hidden"
         />
         {/* //TODO allow users to upload an image, get the url from that and store in sql */}
         <label
           htmlFor="imagePath"
-          className="w-fit text-sm py-2 px-4 rounded-md font-semibold bg-peach text-pink-700 hover:bg-darkPeach cursor-pointer mx-1"
+          className="w-fit text-sm py-2 px-4 rounded-md font-semibold hover:bg-darkerPeach text-white bg-darkPeach cursor-pointer mx-1"
         >
-          Choose an image! (Optional)
+          Choose an image (Optional)
         </label>
 
-        <button className="p-4 rounded-xl bg-paleBlue hover:bg-darkBlue text-white font-bold text-lg mb-32 mx-1">
+        <button className="p-4 rounded-xl bg-darkBlue hover:bg-darkerBlue text-white font-bold text-lg mb-32 mx-1">
           Submit
         </button>
       </form>
