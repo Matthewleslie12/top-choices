@@ -19,7 +19,7 @@ const Saved = () => {
         .then((res) => {
           if (res.data && res.data.data) {
             const userPosts = res.data.data;
-
+            console.log(res.data.data);
             setSavedData(userPosts);
           }
           setLoading(false);
@@ -37,41 +37,28 @@ const Saved = () => {
     navigate(placeDetailsURL);
   }; // TODO: clean up files, make a function folder for example
 
-  useEffect(() => {
+  const handleDelete = (placeId) => {
     axios
-      .get("http://localhost:8081/cuisines")
+      .delete(`http://localhost:8081/places/${placeId}`)
       .then((res) => {
-        setImage(res.data.image);
+        setSavedData((prevData) =>
+          prevData.filter((item) => item.id !== placeId)
+        );
       })
       .catch((err) => {
-        return err;
+        console.error(err);
       });
-  }, []);
-
-  const randomKey = Math.random(1000 * 300);
-
-  // const handleDelete = (placeId) => {
-  //   axios
-  //     .delete(`http://localhost:8081/places/${placeId}`)
-  //     .then((res) => {
-  //       setSavedData((prevData) =>
-  //         prevData.filter((item) => item.id !== placeId)
-  //       );
-  //     })
-  //     .catch((err) => {
-  //       console.error(err);
-  //     });
-  //   deleteModal();
-  // };
-  // const deleteModal = (link) => {
-  //   const confirmed = window.confirm(
-  //     "This will permanently delete the place from your account, are you sure?"
-  //   );
-  //   if (!confirmed) {
-  //     return false;
-  //   }
-  //   return true;
-  // };
+    deleteModal();
+  };
+  const deleteModal = (link) => {
+    const confirmed = window.confirm(
+      "This will permanently delete the place from your account, are you sure?"
+    );
+    if (!confirmed) {
+      return false;
+    }
+    return true;
+  };
   // TODO: Change window.confirm to an actual modal
 
   return (
@@ -87,7 +74,7 @@ const Saved = () => {
           {savedData.length > 0 ? (
             savedData.map((item) => (
               <>
-                {/* <div className="cursor-pointer ">
+                <div className="cursor-pointer ">
                   <Icon
                     icon="ic:outline-delete"
                     onClick={() => {
@@ -95,23 +82,21 @@ const Saved = () => {
                     }}
                     color="red"
                   />
-                </div> */}
+                </div>
                 <div
-                  key={randomKey}
+                  key={item.id}
                   className="rounded-2xl bg-darkBlue p-4 h-32 cursor-pointer hover:bg-darkerBlue "
                   onClick={() => handlePlaceClick(item.id)}
                 >
-                  <div className="grid grid-cols-2 gap-3 ">
-                    {item.image_path ? (
+                  <div className="grid grid-cols-2 gap-4 ">
+                    {item.cuisineImageUrl ? (
                       <img
-                        src={item.image_path}
+                        src={item.cuisineImageUrl}
                         alt=""
-                        className="h-24  object-cover rounded-xl"
+                        className="h-24 w-24 object-cover rounded-xl"
                       />
                     ) : (
-                      <div className="h-24 rounded-xl  w-24">
-                        {item.cuisineImage}
-                      </div> // TODO: Add an animation? or add my own food images and have them be math.random to display differnet ones
+                      <div className="h-24 w-24 object-cover rounded-xl bg-darkPeach"></div>
                     )}
 
                     <div className="flex flex-col justify-between">

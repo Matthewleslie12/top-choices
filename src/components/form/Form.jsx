@@ -95,6 +95,8 @@ const Form = () => {
       .get("http://localhost:8081/cuisines")
       .then((res) => {
         setCuisineType(res.data);
+
+        console.log(cuisineType);
       })
       .catch((err) => {
         return err;
@@ -107,8 +109,23 @@ const Form = () => {
       setFormData((prevData) => ({
         ...prevData,
         imagePath: selectedOption.image || "",
+        cuisine: selectedCuisine?.value,
       }));
+      createNewCuisine(selectedOption.value);
     }
+  };
+
+  const createNewCuisine = (cuisineName) => {
+    axios
+      .post("http://localhost:8081/create-cuisine", {cuisineName})
+      .then((res) => {
+        // Handle success, you can show a success message to the user.
+        console.log("Cuisine created successfully");
+      })
+      .catch((err) => {
+        // Handle error, you can show an error message to the user.
+        console.error(err);
+      });
   };
 
   return (
@@ -160,14 +177,19 @@ const Form = () => {
             Cuisine
           </label>
 
-          <CreatableSelect
-            value={selectedCuisine}
-            onChange={handleCuisineChange}
-            options={cuisineType}
-            isSearchable
-            styles={customStyles}
-            placeholder="Select a cuisine or start typing..."
-          />
+          {cuisineType && cuisineType.length > 0 && (
+            <CreatableSelect
+              value={selectedCuisine}
+              onChange={handleCuisineChange}
+              options={cuisineType.map((cuisine) => ({
+                value: cuisine.name,
+                label: cuisine.name,
+              }))}
+              isSearchable
+              styles={customStyles}
+              placeholder="Select a cuisine or start typing..."
+            />
+          )}
         </div>
 
         <div className="flex flex-col mx-1">
